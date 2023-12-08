@@ -8,8 +8,9 @@ export const ProtectedRoute = ({
   children: JSX.Element | JSX.Element[];
   allowedRoles: string[];
 }) => {
-  const { roles } = decodeToken();
-  const hasPermission = allowedRoles.some((role) => roles.includes(role));
+  const data = decodeToken();
+  console.log(data)
+  const hasPermission = allowedRoles.some((role) => data.roles.includes(role));
 
   if (hasPermission) {
     return children;

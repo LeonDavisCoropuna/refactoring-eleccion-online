@@ -1,9 +1,13 @@
 export interface User {
-  username: string;
+  id_person: number;
+  sub: string;
   roles: string[];
+  exp: number;
 }
 
 export const userEmpty: User = {
-  username: "",
+  id_person: 0,
+  sub: "",
   roles: [],
+  exp: 0,
 };

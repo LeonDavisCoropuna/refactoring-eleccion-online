@@ -15,7 +15,7 @@ function App() {
           <Route
             path="/votacion"
             element={
-              <ProtectedRoute allowedRoles={["votante"]}>
+              <ProtectedRoute allowedRoles={["ROLE_USER"]}>
                 <Votacion />
               </ProtectedRoute>
             }
@@ -23,7 +23,7 @@ function App() {
           <Route
             path="/resultado"
             element={
-              <ProtectedRoute allowedRoles={["admin"]}>
+              <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
                 <Votacion />
               </ProtectedRoute>
             }

@@ -1,8 +1,9 @@
 import axios from "axios";
 export const axiosConfig = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:8082/",
   timeout: 3000,
   withCredentials: true,
 });
+
 
 export default axiosConfig;

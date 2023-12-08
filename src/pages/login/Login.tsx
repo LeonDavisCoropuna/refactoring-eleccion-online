@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Auth } from "./interfaces/auth.interface";
 import { loginService } from "./services/loginService";
+import { useNavigate } from "react-router-dom";
+import { decodeToken } from "../../utils/decodeToken";
 
 export const Login = () => {
+  const navigate = useNavigate();
   const [auth, setAuth] = useState<Auth>({ password: "", username: "" });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAuth({ ...auth, [e.target.name]: e.target.value });
@@ -22,20 +25,25 @@ export const Login = () => {
     if (loginError) {
       setError(loginError);
     } else {
-      // Inicio de sesión exitoso, puedes redirigir al usuario a otra página o realizar otras acciones
-      console.log("Login exitoso");
+      const rol = decodeToken()
+      if(rol.roles.includes("ROLE_USER")) {
+        navigate("/votacion")
+      }
+      else{
+        navigate("/resultado")
+      }
     }
   };
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="flex flex-col gap-5 bg-gray-800 p-10 rounded-2xl shadow-md shadow-slate-950">
         <div className="flex">
-          <h1 className="w-24">Authname:</h1>
+          <h1 className="w-24">Username:</h1>
           <input
             className="w-48 rounded-md py-1 text-black pl-2"
             value={auth.username}
             onChange={handleChange}
-            name="Authname"
+            name="username"
           />
         </div>
         <div className="flex">
