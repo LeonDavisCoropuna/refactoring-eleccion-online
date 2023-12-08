@@ -5,6 +5,7 @@ import { Home } from "./pages/home/Home";
 import { Login } from "./pages/login/Login";
 import { Votacion } from "./pages/votacion/Votacion";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { Resultado } from "./pages/resultado/Resultado";
 function App() {
   return (
     <>
@@ -24,7 +25,7 @@ function App() {
             path="/resultado"
             element={
               <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
-                <Votacion />
+                <Resultado />
               </ProtectedRoute>
             }
           />

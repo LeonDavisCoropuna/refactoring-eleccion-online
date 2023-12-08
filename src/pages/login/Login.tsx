@@ -6,7 +6,7 @@ import { decodeToken } from "../../utils/decodeToken";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [auth, setAuth] = useState<Auth>({ password: "", username: "" });
+  const [auth, setAuth] = useState<Auth>({ password: "", userName: "" });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAuth({ ...auth, [e.target.name]: e.target.value });
     setError(null);
@@ -15,7 +15,7 @@ export const Login = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
-    if (!auth.password || !auth.username) {
+    if (!auth.password || !auth.userName) {
       setError("Todos los campos son obligatorios");
       return;
     }
@@ -41,9 +41,9 @@ export const Login = () => {
           <h1 className="w-24">Username:</h1>
           <input
             className="w-48 rounded-md py-1 text-black pl-2"
-            value={auth.username}
+            value={auth.userName}
             onChange={handleChange}
-            name="username"
+            name="userName"
           />
         </div>
         <div className="flex">

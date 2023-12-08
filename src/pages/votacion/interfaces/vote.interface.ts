@@ -1,4 +1,5 @@
 export interface Vote {
-    idUser: number;
-    idParty: number;
+    idElector: number;
+    idPoliticalParty: number;
+    date: Date;
 }

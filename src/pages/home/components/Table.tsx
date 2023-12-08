@@ -15,10 +15,10 @@ export const Table = ({ candidates }: { candidates: Candidate[] }) => {
       <tbody>
         {candidates.map((candidate) =>
           candidate.job === "Presidente" ? (
-            <TableRow candidate={candidate} key={candidate.username} />
+            <TableRow candidate={candidate} key={candidate.id} />
           ) : null
         )}
-      </tbody>
+      </tbody>  
     </table>
   );
 };

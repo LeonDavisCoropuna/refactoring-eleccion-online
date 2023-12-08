@@ -3,39 +3,27 @@ import axios from "../../../config/axios";
 
 export const fetchCandidates = async (): Promise<Candidate[]> => {
   try {
-    const response = await axios.get("/auth/avegod");
-    console.log(response)
-    //const candidates: Candidate[] = response.data;
-    return [];
+    const response = await axios.get("/auth/all-candidate");
+    const candidates: Candidate[] = response.data;
+    return candidates;
   } catch (error) {
+    
     return [
       {
-        name: "Aldo",
-        lastName: "Martinez",
-        username: "aldechi_11",
+        candidateName: "Aldo",
+        candidateLastName: "Martinez",
+        userName: "aldechi_11",
         job: "Presidente",
-        politicalParty: "FreeFap",
+        namePoliticalParty: "FreeFap",
+        id: 5,
       },
       {
-        name: "Avelino",
-        lastName: "Lupo",
-        username: "alupoc_35",
+        candidateName: "Aldo",
+        candidateLastName: "Martinez",
+        userName: "aldechi_11",
         job: "Presidente",
-        politicalParty: "Peru libre",
-      },
-      {
-        name: "Randu",
-        lastName: "Cerpa",
-        username: "randu56",
-        job: "vicePresidente",
-        politicalParty: "FreeFap",
-      },
-      {
-        name: "null",
-        lastName: "null",
-        username: "null",
-        job: "null",
-        politicalParty: "Nulo",
+        namePoliticalParty: "FreeFap",
+        id: 6,
       },
     ];
   }

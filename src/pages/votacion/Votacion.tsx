@@ -5,14 +5,14 @@ import { fetchPartys } from "./services/fetchPartys";
 import Modal from "./components/Model";
 import { useModal } from "./hooks/useModal";
 import { Vote } from "./interfaces/vote.interface";
-import axios from "../../config/axios";
 import { MdErrorOutline } from "react-icons/md";
 import { GrValidate } from "react-icons/gr";
-import Cookies from "js-cookie";
+import { sendVote } from "./services/sendVote";
+import { LogoutButton } from "../home/components/Logout";
 import { useNavigate } from "react-router-dom";
 export const Votacion = () => {
-  const navigate = useNavigate();
-  const { id_person, sub } = decodeToken();
+  const navigate = useNavigate()
+  const { id_person, sub, exp } = decodeToken();
   const [isOpenModal, openModal, closeModal] = useModal();
   const [isOpenModal2, openModal2, closeModal2] = useModal();
   const [isOpenModal3, openModal3, closeModal3] = useModal();
@@ -28,16 +28,18 @@ export const Votacion = () => {
     fetchData();
   }, []);
   const handleSubmit = async () => {
-    const vote: Vote = {
-      idUser: id_person,
-      idParty: selectedParty,
+    const newVote: Vote = {
+      idElector: id_person,
+      idPoliticalParty: selectedParty,
+      date: new Date()
     }
     closeModal();
-    try {
-      const response = await axios.post("/api/votacion", vote);
-      setResultVote({ status: 1, message: "Se registro el voto exitosamente" })
-    } catch (error) {
-      setResultVote({ status: 0, message: "!Ups, ocurrio un error" })
+    const response = await sendVote(newVote)
+    if (response.status === 200) {
+      setResultVote({ status: 1, message: response.message })
+    }
+    else {
+      setResultVote({ status: 0, message: response.message })
     }
     openModal2();
   }
@@ -49,18 +51,32 @@ export const Votacion = () => {
       openModal3();
     }
   }
-  const handleLogout = () => {
-    Cookies.remove("token")
-    navigate("/")
-  }
+
+  // Función para redirigir al inicio cuando el tiempo expire
+  const handleTimeout = () => {
+    navigate("/");
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(handleTimeout, exp * 1000); // exp está en segundos
+    return () => clearTimeout(timeoutId);
+  }, [exp, navigate]);
+
+  // Función para calcular el tiempo restante
+  const calculateRemainingTime = () => {
+    const now = Math.floor(Date.now() / 1000); 
+    const remainingTime = exp - now;
+    if(remainingTime < 0) handleTimeout(); 
+    return remainingTime > 0 ? remainingTime : 0;
+  };
+
   return (
     <div className="h-screen px-40 py-20">
       <div className="flex justify-between items-center bg-blue-800 rounded-md py-5 px-5">
         <div>Bienvenido {sub}</div>
+        <div>Tiempo restante en la sesión: {calculateRemainingTime()} segundos</div>        
         <div>
-          <button className="bg-red-500 px-5 py-1 rounded-md hover:bg-white hover:text-black" onClick={handleLogout}>
-            Salir
-          </button>
+          <LogoutButton />
         </div>
       </div>
       <div className="flex w-full justify-center py-10">
@@ -79,7 +95,7 @@ export const Votacion = () => {
                 <td className="w-24">{party.id}</td>
                 <td className="flex justify-center">
                   <img
-                    src={party.logo}
+                    src={party.namePoliticalParty}
                     alt="party"
                     style={{ width: "80px", height: "80px" }}
                   />
@@ -105,7 +121,7 @@ export const Votacion = () => {
             <img
               src={
                 partys
-                  ? (partys.find((e) => e.id === selectedParty) || {}).logo || ""
+                  ? (partys.find((e) => e.id === selectedParty) || {}).namePoliticalParty || ""
                   : ""
               }
               alt="party"
@@ -124,7 +140,6 @@ export const Votacion = () => {
             <MdErrorOutline size={40} color="red" />
             Debe escoger un partido politico antes de votar
           </div>
-
         </div>
       </Modal>
       <Modal isOpen={isOpenModal2} closeModal={closeModal2} heightModal={5} widthModal={10}>

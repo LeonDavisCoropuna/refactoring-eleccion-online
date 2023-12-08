@@ -9,7 +9,6 @@ export const ProtectedRoute = ({
   allowedRoles: string[];
 }) => {
   const data = decodeToken();
-  console.log(data)
   const hasPermission = allowedRoles.some((role) => data.roles.includes(role));
 
   if (hasPermission) {
